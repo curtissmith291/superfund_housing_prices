@@ -20,9 +20,9 @@ This section details the methods used to obtain and transform the Superfund Site
 
 ### EPA Superfund Site Location Data Extraction
 
-The EPA maintains a database of active and archived Superfund sites available through their Superfund Enterprise Management System (SEMS): https://www.epa.gov/enviro/sems-overview)
+The EPA maintains a database of Superfund sites available through their Superfund Enterprise Management System (SEMS): https://www.epa.gov/enviro/sems-overview)
 
-Data were retrieved from this database using API retrieval. This process with done in two steps as the SEMS database has different table names for active and archived sites. Different attempts were made to retrieve the Superfund Site data for all locations without using the for-loop shown below; however, previous attempts either did not result in data being retrieved or took so long as to not be useful. The code to obtain the information for active sites is below:
+Data were retrieved from this database using API retrieval. This process with done in two steps as the SEMS database has different table names for active and archived sites. Different attempts were made to retrieve the Superfund Site data for all locations without using the for-loop shown below; however, previous attempts either did not result in data being retrieved or took so long as to not be useful. The code to obtain the information for Superfund sites is below:
 
 ```
 x = 0
@@ -45,32 +45,15 @@ Data download complete \n\
 ----------------------')
 ```
 
-A list of United States state codes (e.g., CA for California) was iterated through and added to the API URL and returned the data in a JSON format, which was then converted into a Pandas data frame. Successive data was then concatenated to main active site data frame. 
+A list of United States state codes (e.g., CA for California) was iterated through and added to the API URL and returned the data in a JSON format, which was then converted into a Pandas data frame. Successive data was then concatenated to main Superfund sites data frame. 
 
-Issues arose while retrieving archived data in the form of "JSONDecodeError: Extra data:" errors for the following states: FL, GA, IA, KS, KY, MD, MA, MN, MO, MT, NE, NJ, NM, NY, ND, OH, PA, PR, RI, SD, and TX. A solution was found by downloading the archived data as CSV files and then converting into data frames. The code is below:
-
-```
-x = 0
-for state in states:
-    try:
-        request = requests.get(f'https://data.epa.gov/efservice/SEMS_ARCHIVED_SITES/SITE_STATE/CONTAINING/{state}/CSV')
-        temp_df = pd.DataFrame(request)
-        if x == 0:
-            sf_archived_df = temp_df.copy()
-            print(f'{state} added to DataFrame')
-            x = 1
-        else:
-            sf_archived_df = pd.concat([sf_archived_df, temp_df])
-            print(f'{state} added to DataFrame')
-    except Exception:
-        print(Exception)
-        print(f'Exception occurred on {state}')
-print('----------------------\n\
-Data download complete \n\
-----------------------')
-```
 
 ### Superfund Site Data Transformation
 
-1)
+1) Data retrieved from the EPA database had "&"s replaced with "%26"s; a function was applied to replace "%26"s with "&"s. 
+
+2) The individual address components (i.e., street address, city, state, and zip code) were appended and added to new column. 
+
+3) Coordinates were not provided for a majority of the Superfund sites; coordinates were obtained using the Nominatum from the geopy module, then added to a new column. 
+ 
  

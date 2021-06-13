@@ -2,7 +2,7 @@
 Analysis on the effect of housing prices near EPA Superfund Sites
 
 
-##Note: This project is currently ongoing and these
+##Note: This project is currently active and text/code/files can change
 
 
 ## Project Overview and Abstract
@@ -42,9 +42,28 @@ for state in states:
 
 A list of United States state codes (e.g., CA for California) was iterated through and added to the API URL and returned the data in a JSON format, which was then converted into a Pandas data frame. Successive data was then concatenated to main active site data frame. 
 
-The process for retrieving the archived sites was functionally the same; however, issues arose while retrieving archived data in the form of "JSONDecodeError: Extra data:" errors for the following states: Florida, Georgia, X. Due to the limited scope of the project, the non-addition of archived site locations was deemed acceptable as the initial scope was to identify a select few location to run analysis on, and there are >10,000 other locations with which to choose from. 
+Issues arose while retrieving archived data in the form of "JSONDecodeError: Extra data:" errors for the following states: FL, GA, IA, KS, KY, MD, MA, MN, MO, MT, NE, NJ, NM, NY, ND, OH, PA, PR, RI, SD, and TX. A solution was found by downloading the archived data as CSV files and then converted into data frames. The code is below:
+
+'''
+x = 0
+for state in states:
+    try:
+        request = requests.get(f'https://data.epa.gov/efservice/SEMS_ARCHIVED_SITES/SITE_STATE/CONTAINING/{state}/CSV')
+#         url_data = request.content
+        temp_df = pd.DataFrame(request)
+        if x == 0:
+            sf_archived_df_csv = temp_df.copy()
+            print(f'{state} added to DataFrame')
+            x = 1
+        else:
+            sf_archived_df_csv = pd.concat([sf_archived_df, temp_df])
+            print(f'{state} added to DataFrame')
+    except Exception:
+        print(Exception)
+        print(f'Exception occurred on {state}')
+'''
 
 ### Superfund Site Data Transformation
 
- 
+1)
  

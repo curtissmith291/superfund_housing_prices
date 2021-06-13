@@ -27,20 +27,27 @@ Data were retrieved from this database using API retrieval. This process with do
 ```
 x = 0
 for state in states:
-    request = requests.get(f'https://data.epa.gov/efservice/SEMS_ACTIVE_SITES/SITE_STATE/CONTAINING/{state}/JSON').json()
-    temp_df = pd.DataFrame(request)
-    if x == 0:
-        sf_active_df = temp_df.copy()
-        print(f'{state} added to DataFrame')
-        x = 1
-    else:
-        sf_active_df = pd.concat([sf_active_df, temp_df])
-        print(f'{state} added to DataFrame')
+    try:
+        request = requests.get(f'https://data.epa.gov/efservice/SEMS_ACTIVE_SITES/SITE_STATE/CONTAINING/{state}/JSON').json()
+        temp_df = pd.DataFrame(request)
+        if x == 0:
+            sf_active_df = temp_df.copy()
+            print(f'{state} added to DataFrame')
+            x = 1
+        else:
+            sf_active_df = pd.concat([sf_active_df, temp_df])
+            print(f'{state} added to DataFrame')
+    except Exception:
+        print(Exception)
+        print(f'Exception occurred on {state}')
+print('----------------------\n\
+Data download complete \n\
+----------------------')
 ```
 
 A list of United States state codes (e.g., CA for California) was iterated through and added to the API URL and returned the data in a JSON format, which was then converted into a Pandas data frame. Successive data was then concatenated to main active site data frame. 
 
-Issues arose while retrieving archived data in the form of "JSONDecodeError: Extra data:" errors for the following states: FL, GA, IA, KS, KY, MD, MA, MN, MO, MT, NE, NJ, NM, NY, ND, OH, PA, PR, RI, SD, and TX. A solution was found by downloading the archived data as CSV files and then converted into data frames. The code is below:
+Issues arose while retrieving archived data in the form of "JSONDecodeError: Extra data:" errors for the following states: FL, GA, IA, KS, KY, MD, MA, MN, MO, MT, NE, NJ, NM, NY, ND, OH, PA, PR, RI, SD, and TX. A solution was found by downloading the archived data as CSV files and then converting into data frames. The code is below:
 
 ```
 x = 0
@@ -49,15 +56,18 @@ for state in states:
         request = requests.get(f'https://data.epa.gov/efservice/SEMS_ARCHIVED_SITES/SITE_STATE/CONTAINING/{state}/CSV')
         temp_df = pd.DataFrame(request)
         if x == 0:
-            sf_archived_df_csv = temp_df.copy()
+            sf_archived_df = temp_df.copy()
             print(f'{state} added to DataFrame')
             x = 1
         else:
-            sf_archived_df_csv = pd.concat([sf_archived_df, temp_df])
+            sf_archived_df = pd.concat([sf_archived_df, temp_df])
             print(f'{state} added to DataFrame')
     except Exception:
         print(Exception)
         print(f'Exception occurred on {state}')
+print('----------------------\n\
+Data download complete \n\
+----------------------')
 ```
 
 ### Superfund Site Data Transformation

@@ -64,5 +64,7 @@ A list of United States state codes (e.g., CA for California) was iterated throu
 
 # Thoughts
 - ranking system for Sites? Categorize by contamination type?
+- Categorize by urban/suburban/rural? Are there rules for that, e.g. number of miles from city center?
+- Census Bureau has interesting APIs that could be used for interesting analysis: https://www.census.gov/data/developers/data-sets.html
  
  

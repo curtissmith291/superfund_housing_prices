@@ -54,6 +54,15 @@ A list of United States state codes (e.g., CA for California) was iterated throu
 
 2) The individual address components (i.e., street address, city, state, and zip code) were appended and added to new column. 
 
-3) Coordinates were not provided for a majority of the Superfund sites; coordinates were obtained using the Nominatum from the geopy module, then added to a new column. 
+3) Coordinates were not provided for a majority of the Superfund sites; coordinates were obtained using the Nominatum from the geopy module, then added to a new column. Of the original 13,167 Superfund Site IDs, 6,516 had addresses suitable for determining latitude/longitude coordinates. Due to the nature of some Superfund Sites being very large and ofter away from developed locations, addresses are given as the intersection of streets, which do not return physical address, thus, are not able to return coordinates. The 6,516 should be more than enough to for our analysis. 
+
+# To-Do
+- locate housing transaction data - finding enough housing data nearby site is going to be tricky
+- locate nearby superfund site to housing data; using refactored distance calculator for prior project
+- Will need to hand enter milestone dates for Superfund sites as they are not in the EPA Database
+- 
+
+# Thoughts
+- ranking system for Sites? Categorize by contamination type?
  
  
